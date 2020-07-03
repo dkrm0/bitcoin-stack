@@ -136,12 +136,19 @@ services:
 
   frank:
     container_name: ${COMPOSE_PROJECT_NAME}_frank
-    image: bitcoinstack/eclair:0.3.4
-    command: ["bash", "eclair-node/bin/eclair-node.sh"]
+    image: dkrm/eclair:latest
+    networks:
+      lightning-net:
+        aliases:
+          - ${FRANK_HOST}
+    command: >-
+        bash eclair-node/bin/eclair-node.sh
     environment:
       - |
         JAVA_TOOL_OPTIONS=
         -Xmx512m
+        -Declair.headless=true
+        -Declair.printToConsole=true
         -Declair.chain=regtest
         -Declair.datadir=/data
         -Declair.node-alias=frank
