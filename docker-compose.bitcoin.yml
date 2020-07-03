@@ -1,4 +1,9 @@
-version: "2.4"
+version: '3.8'
+
+networks:
+  lightning-net:
+    name: lightning-net
+    driver: bridge
 
 volumes:
   bitcoin_data:
