@@ -12,7 +12,7 @@ volumes:
 services:
   bitcoin:
     container_name: ${COMPOSE_PROJECT_NAME}_bitcoin
-    image: bitcoinstack/bitcoin:0.19.1-alpine
+    image: bitcoinstack/bitcoin:${BITCOIN_VERSION}-alpine
     networks:
       lightning-net:
         aliases:
