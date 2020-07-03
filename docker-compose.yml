@@ -18,6 +18,10 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_alice
     image: bitcoinstack/lnd:0.10.0-alpine
     restart: unless-stopped
+    networks:
+      lightning-net:
+        aliases:
+          - ${ALICE_HOST}
     command: [
       "--noseedbackup",
       "--alias=alice",
@@ -47,6 +51,10 @@ services:
   bob:
     container_name: ${COMPOSE_PROJECT_NAME}_bob
     image: bitcoinstack/lnd:0.10.0-alpine
+    networks:
+      lightning-net:
+        aliases:
+          - ${BOB_HOST}
     restart: unless-stopped
     command: [
       "--noseedbackup",
@@ -78,6 +86,10 @@ services:
   carol:
     container_name: ${COMPOSE_PROJECT_NAME}_carol
     image: bitcoinstack/clightning:0.8.2.1-alpine
+    networks:
+      lightning-net:
+        aliases:
+          - ${CAROL_HOST}
     command: [
       "--alias=carol",
       "--network=regtest",
@@ -100,6 +112,10 @@ services:
   dave:
     container_name: ${COMPOSE_PROJECT_NAME}_dave
     image: bitcoinstack/clightning:0.8.2.1-alpine
+    networks:
+      lightning-net:
+        aliases:
+          - ${DAVE_HOST}
     command: [
       "--alias=dave",
       "--network=liquid-regtest",
@@ -121,6 +137,10 @@ services:
   emma:
     container_name: ${COMPOSE_PROJECT_NAME}_emma
     image: bitcoinstack/clightning:0.8.2.1-alpine
+    networks:
+      lightning-net:
+        aliases:
+          - ${EMMA_HOST}
     command: [
       "--alias=emma",
       "--network=liquid-regtest",
@@ -178,6 +198,8 @@ services:
   subscriber:
     container_name: ${COMPOSE_PROJECT_NAME}_subscriber
     image: bitcoinstack/subscriber:0.1
+    networks:
+      - lightning-net
     restart: unless-stopped
     command: ['node', 'subscriber.js']
     depends_on:
