@@ -156,7 +156,7 @@ services:
 
   frank:
     container_name: ${COMPOSE_PROJECT_NAME}_frank
-    image: dkrm/eclair:latest
+    image: dkrm/eclair:keysend
     networks:
       lightning-net:
         aliases:
