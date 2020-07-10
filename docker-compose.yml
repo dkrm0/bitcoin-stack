@@ -12,6 +12,7 @@ volumes:
   dave_data:
   emma_data:
   frank_data:
+  gaston_data:
 
 services:
   alice:
@@ -189,6 +190,42 @@ services:
       - bitcoin
     volumes:
       - frank_data:/data
+
+  gaston:
+    container_name: ${COMPOSE_PROJECT_NAME}_gaston
+    image: dkrm/eclair:keysend
+    networks:
+      lightning-net:
+        aliases:
+          - ${GASTON_HOST}
+    command: >-
+        bash eclair-node/bin/eclair-node.sh
+    environment:
+      - |
+        JAVA_TOOL_OPTIONS=
+        -Xmx512m
+        -Declair.headless=true
+        -Declair.printToConsole=true
+        -Declair.chain=regtest
+        -Declair.datadir=/data
+        -Declair.node-alias=gaston
+        -Declair.server.port=${GASTON_PORT}
+        -Declair.bitcoind.host=${BITCOIN_HOST}
+        -Declair.bitcoind.rpcport=${BITCOIN_RPC_PORT}
+        -Declair.bitcoind.rpcuser=${BITCOIN_RPC_USER}
+        -Declair.bitcoind.rpcpassword=${BITCOIN_RPC_PASSWORD}
+        -Declair.bitcoind.zmqtx=tcp://${BITCOIN_HOST}:${BITCOIN_ZMQ_TX_PORT}
+        -Declair.bitcoind.zmqblock=tcp://${BITCOIN_HOST}:${BITCOIN_ZMQ_BLOCK_PORT}
+        -Declair.api.enabled=true
+        -Declair.api.port=${GASTON_REST_PORT}
+        -Declair.api.password=password
+        -Declair.api.binding-ip=0.0.0.0
+    ports:
+      - "127.0.0.1:${GASTON_REST_PORT}:${GASTON_REST_PORT}"
+    depends_on:
+      - bitcoin
+    volumes:
+      - gaston_data:/data
 
   subscriber:
     container_name: ${COMPOSE_PROJECT_NAME}_subscriber
